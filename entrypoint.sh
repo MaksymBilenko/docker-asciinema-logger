@@ -1,13 +1,16 @@
 #!/bin/bash
 # set -e
 
-# if [ ! $ASCIINEMA_TOKEN ]; then
-# 	echo 'Please set ASCIINEMA_TOKEN'
-# 	exit 1
-# fi
-# mkdir -p ~/.config/asciinema/
-# echo '[api]' > ~/.config/asciinema/config
-# echo "token = $ASCIINEMA_TOKEN" >> ~/.config/asciinema/config
+if [ ! $ASCIINEMA_TOKEN ]; then
+	echo 'Please set ASCIINEMA_TOKEN'
+	exit 1
+fi
+mkdir -p ~/.config/asciinema/
+echo '[api]' > ~/.config/asciinema/config
+echo "token = $ASCIINEMA_TOKEN" >> ~/.config/asciinema/config
+if [ $API_URL ]; then
+	echo "url = $API_URL" >> ~/.config/asciinema/config
+fi
 
 
 function Trap() {
@@ -28,7 +31,7 @@ trap Trap SIGTERM SIGINT SIGHUP
 
 function start_record {
 	if ! screen -list | grep -q "$1"; then
-		screen -S ${1} -d -m /usr/local/bin/asciinema rec -y -c "docker attach --no-stdin $1" /records/record-${1}.json
+		screen -S ${1} -d -m /usr/local/bin/asciinema rec -y -c "docker attach $1"
 		echo "Started record for ${1}"
 	fi
 }
