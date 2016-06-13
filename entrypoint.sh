@@ -32,7 +32,7 @@ trap Trap SIGTERM SIGINT SIGHUP
 
 function start_record {
 	if ! screen -list | grep -q "$1"; then
-		screen -S ${1} -d -m /usr/local/bin/asciinema rec -y -t "${HOSTNAME}_${1}" -w 1 -c "docker attach $1"
+		screen -A -S ${1} -d -m /usr/local/bin/asciinema rec -y -t "${HOSTNAME}_${1}" -w 1 -c "docker attach $1"
 		echo "Started record for ${1} with name: ${HOSTNAME}_${1}"
 	fi
 }
