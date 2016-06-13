@@ -5,6 +5,7 @@ if [ ! $ASCIINEMA_TOKEN ]; then
 	echo 'Please set ASCIINEMA_TOKEN'
 	exit 1
 fi
+
 mkdir -p ~/.config/asciinema/
 echo '[api]' > ~/.config/asciinema/config
 echo "token = $ASCIINEMA_TOKEN" >> ~/.config/asciinema/config
@@ -31,8 +32,8 @@ trap Trap SIGTERM SIGINT SIGHUP
 
 function start_record {
 	if ! screen -list | grep -q "$1"; then
-		screen -S ${1} -d -m /usr/local/bin/asciinema rec -y -c "docker attach $1"
-		echo "Started record for ${1}"
+		screen -S ${1} -d -m /usr/local/bin/asciinema rec -y -t "${HOSTNAME}_${1}" -w 1 -c "docker attach $1"
+		echo "Started record for ${1} with name: ${HOSTNAME}_${1}"
 	fi
 }
 
