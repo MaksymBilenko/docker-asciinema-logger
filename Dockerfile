@@ -1,6 +1,6 @@
 FROM ubuntu
 
-RUN  apt-get update && apt-get install locales curl screen -y && apt-get clean
+RUN  apt-get update && apt-get install locales curl tmux -y && apt-get clean
 RUN  curl -o /usr/bin/docker "https://get.docker.com/builds/Linux/i386/docker-latest" && chmod +x /usr/bin/docker
 
 #Fix locales

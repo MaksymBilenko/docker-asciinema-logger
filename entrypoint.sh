@@ -17,8 +17,8 @@ fi
 function Trap() {
 	TIMEOUT=30
 	while [ $TIMEOUT -gt 0 ]; do
-		if screen -ls; then
-			echo "There is a running processes left: `ps ax | grep 'asciinema rec' | grep -v grep | grep -v SCREEN | wc -l`. Timeout is $TIMEOUT seconds..."
+		if tmux ls; then
+			echo "There is a running processes left: `tmux ls 2>/dev/null | wc -l`. Timeout is $TIMEOUT seconds..."
 			sleep 5
 			TIMEOUT=$((TIMEOUT - 5))
 		else
@@ -31,8 +31,8 @@ function Trap() {
 trap Trap SIGTERM SIGINT SIGHUP
 
 function start_record {
-	if ! screen -list | grep -q "$1"; then
-		screen -A -S ${1} -d -m /usr/local/bin/asciinema rec -y -t "${HOSTNAME}_${1}" -w 1 -c "docker attach $1"
+	if ! tmux ls | grep -q "$1"; then
+		tmux new -d -s ${1} "/usr/local/bin/asciinema rec -y -t '${HOSTNAME}_${1}' -w 1 -c 'docker attach $1'"
 		echo "Started record for ${1} with name: ${HOSTNAME}_${1}"
 	fi
 }
